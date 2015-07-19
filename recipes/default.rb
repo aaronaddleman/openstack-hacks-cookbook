@@ -26,6 +26,17 @@ user 'mysql' do
   password '$1$JJsvHslasdfjVEroftprNn4JHtDi'
 end
 
-yum install http://rdo.fedorapeople.org/openstack-juno/rdo-release-juno.rpm
-yum install http://dl.fedoraproject.org/pub/epel/7/x86_64/e/epel-release-7-5.noarch.rpm
-mkdir -p /var/log/ironic
+
+execute "yum install rdo" do
+  command "yum -y install http://rdo.fedorapeople.org/openstack-juno/rdo-release-juno.rpm"
+  only_if "rpm -qa | grep -qw rdo-release-juno"
+end
+
+execute "yum install epel" do
+  command "yum -y install http://dl.fedoraproject.org/pub/epel/7/x86_64/e/epel-release-7-5.noarch.rpm"
+  only_if "rpm -qa | grep -qw epel-release"
+end
+
+directory "/var/log/ironic" do
+  action :create
+end
